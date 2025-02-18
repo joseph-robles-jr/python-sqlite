@@ -1,34 +1,31 @@
 import sqlite3
 
-'''How to create and update a table in SQLite'''
+try:
 
-# Connect to an SQLite database (or create it if it doesn't exist)
-conn = sqlite3.connect('example.db')
+	# Connect to DB and create a cursor
+	sqliteConnection = sqlite3.connect('sql.db')
+	cursor = sqliteConnection.cursor()
+	print('DB Init')
 
-# Create a cursor object using the cursor() method
-cursor = conn.cursor()
+	# Write a query and execute it with cursor
+	query = 'select sqlite_version();'
+	cursor.execute(query)
 
-# Create table
-cursor.execute('''CREATE TABLE IF NOT EXISTS stocks
-             (date text, trans text, symbol text, qty real, price real)''')
+	# Fetch and output result
+	result = cursor.fetchall()
+	print('SQLite Version is {}'.format(result))
 
-# Insert a row of data
-cursor.execute("INSERT INTO stocks VALUES ('2006-01-05','BUY','RHAT',100,35.14)")
+	# Close the cursor
+	cursor.close()
 
-# Save (commit) the changes
-conn.commit()
+# Handle errors
+except sqlite3.Error as error:
+	print('Error occurred - ', error)
 
-# Close the connection
-conn.close()
+# Close DB Connection irrespective of success
+# or failure
+finally:
 
-
-sqliteConnection = sqlite3.connect('sql.db')
-cursor = sqliteConnection.cursor()
-
-query = "SQL query;"
-cursor.execute(query)
-result = cursor.fetchall()
-print('SQLite Version is {}'.format(result))
-
-
-
+	if sqliteConnection:
+		sqliteConnection.close()
+		print('SQLite Connection closed')
