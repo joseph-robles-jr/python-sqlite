@@ -17,17 +17,28 @@ def create_table():
     conn.commit()
     conn.close()
 
-def update_contact(TXCallsign, TXrst, RXCallsign, RXrst, mode, power, frequency):
+def setTXCallsign():
+	TXCallsign = ''
+	while len(TXCallsign) == 0: 
+			inputTXCallsign = input('Enter Your Callsign: ')
+			if inputTXCallsign.isalnum() > 0:
+				TXCallsign = str.capitalize(inputTXCallsign)
+			else:
+				print('TX Callsign must be alphanumeric. Try Again.')
+
+	return TXCallsign
+
+def update_contact( TXrst, RXCallsign, RXrst, mode, power, frequency):
 	conn = sqlite3.connect('contacts.db')
 	cursor = conn.cursor()
 	cursor.execute('''UPDATE contacts SET TXCallsign = ?, TXrst = ?, RXCallsign = ?, RXrst = ?, mode = ?, power = ?, frequency = ? WHERE TXCallsign = ?''', (TXCallsign, TXrst, RXCallsign, RXrst, mode, power, frequency, TXCallsign))
 	conn.commit()
 	conn.close()
 
-def insert_contact(TXcallsign, TXrst, RXCallsign, RXrst, mode, power, frequency):
+def insert_contact( TXrst, RXCallsign, RXrst, mode, power, frequency):
     conn = sqlite3.connect('contacts.db')
     cursor = conn.cursor()
-    cursor.execute('''INSERT INTO contacts (TXcallsign, TXrst, RXCallsign, RXrst, mode, power, frequency) VALUES (?, ?, ?, ?, ?, ?, ?)''', (TXcallsign, TXrst, RXCallsign, RXrst, mode, power, frequency))
+    cursor.execute('''INSERT INTO contacts (TXcallsign, TXrst, RXCallsign, RXrst, mode, power, frequency) VALUES (?, ?, ?, ?, ?, ?, ?)''', (TXCallsign, TXrst, RXCallsign, RXrst, mode, power, frequency))
     conn.commit()
     conn.close()
 
@@ -75,13 +86,7 @@ def make_contact(update	= False):
 					else:
 						RXCallsign = callsign_to_update
 
-		while len(TXCallsign) == 0: #callsign section
-			inputTXCallsign = input('Enter TX Callsign: ')
-			if inputTXCallsign.isalnum() > 0:
-				TXCallsign = str.capitalize(inputTXCallsign)
-			else:
-				print('TX Callsign must be alphanumeric. Try Again.')
-
+		
 
 		while TXrst.bit_length() == 0: #TX RST section
 			inputTXrst = int(input('Enter TX RST: '))
@@ -157,10 +162,9 @@ def menu():
 		elif choice == 4:
 			print(get_contacts())
 
-
 def main():
 	create_table()
 	menu()
 	
-
+TXCallsign = setTXCallsign()
 main()
