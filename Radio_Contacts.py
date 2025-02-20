@@ -1,5 +1,6 @@
 import sqlite3
 
+
 def create_table():
     conn = sqlite3.connect('contacts.db')
     cursor = conn.cursor()
@@ -28,14 +29,14 @@ def setTXCallsign():
 
 	return TXCallsign
 
-def update_contact( TXrst, RXCallsign, RXrst, mode, power, frequency):
+def update_contact(TXrst, RXCallsign, RXrst, mode, power, frequency):
 	conn = sqlite3.connect('contacts.db')
 	cursor = conn.cursor()
 	cursor.execute('''UPDATE contacts SET TXCallsign = ?, TXrst = ?, RXCallsign = ?, RXrst = ?, mode = ?, power = ?, frequency = ? WHERE TXCallsign = ?''', (TXCallsign, TXrst, RXCallsign, RXrst, mode, power, frequency, TXCallsign))
 	conn.commit()
 	conn.close()
 
-def insert_contact( TXrst, RXCallsign, RXrst, mode, power, frequency):
+def insert_contact( TXCallsign, TXrst, RXCallsign, RXrst, mode, power, frequency):
     conn = sqlite3.connect('contacts.db')
     cursor = conn.cursor()
     cursor.execute('''INSERT INTO contacts (TXcallsign, TXrst, RXCallsign, RXrst, mode, power, frequency) VALUES (?, ?, ?, ?, ?, ?, ?)''', (TXCallsign, TXrst, RXCallsign, RXrst, mode, power, frequency))
@@ -60,11 +61,11 @@ def delete_contact():
 	conn.commit()
 	conn.close()
 
-def make_contact(update	= False):
+def make_contact(TXCallsign, update	= False):
 	contact_complete = False
 
 	while contact_complete == False:
-		TXCallsign = ''
+		
 		TXrst = 0
 		RXCallsign = ''
 		RXrst = 0
@@ -95,7 +96,7 @@ def make_contact(update	= False):
 			else:
 				print('TX RST must be between 0 and 59. Try Again.')
 	
-		if update == True:
+		if update == False:
 			while len(RXCallsign) == 0: #RX Callsign section
 				inputRXCallsign = input('Enter RX Callsign: ')
 				if inputRXCallsign.isalnum() > 0:
@@ -143,7 +144,7 @@ def make_contact(update	= False):
 	elif update == True:
 		update_contact(TXCallsign, TXrst, RXCallsign, RXrst, mode, power, frequency)
 
-def menu():
+def menu(TXCallsign):
 	choice = -1
 	while choice != 5:
 		print('1. Add Contact')
@@ -154,17 +155,11 @@ def menu():
 		choice = int(input('Enter Choice: '))
 
 		if choice == 1:
-			make_contact()
+			make_contact(TXCallsign)
 		elif choice == 2:
-			make_contact(update=True)
+			make_contact(TXCallsign, update=True)
 		elif choice == 3:
 			delete_contact()
 		elif choice == 4:
 			print(get_contacts())
 
-def main():
-	create_table()
-	menu()
-	
-TXCallsign = setTXCallsign()
-main()
