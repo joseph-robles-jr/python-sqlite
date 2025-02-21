@@ -91,7 +91,7 @@ def make_contact(TXCallsign, update	= False):
 
 		while TXrst.bit_length() == 0: #TX RST section
 			inputTXrst = int(input('Enter TX RST: '))
-			if inputTXrst >= 0 and inputTXrst <= 599:
+			if inputTXrst >= 0 and inputTXrst <= 59:
 				TXrst = inputTXrst
 			else:
 				print('TX RST must be between 0 and 59. Try Again.')
@@ -106,7 +106,7 @@ def make_contact(TXCallsign, update	= False):
 
 		while RXrst.bit_length() == 0: #RX RST section
 			inputRXrst = int(input('Enter RX RST: '))
-			if inputRXrst >= 0 and inputRXrst <= 599:
+			if inputRXrst >= 0 and inputRXrst <= 59:
 				RXrst = inputRXrst
 			else:
 				print('RX RST must be between 0 and 59. Try Again.')
@@ -118,11 +118,15 @@ def make_contact(TXCallsign, update	= False):
 					mode = 'FM '
 				elif inputMode == 'ssb' or inputMode == 'SSB':
 					mode = 'SSB'
+				elif inputMode == 'usb' or inputMode == 'USB':
+					mode = 'USB'
+				elif inputMode == 'lsb' or inputMode == 'LSB':
+					mode = 'USB'
 				elif inputMode == 'cw' or inputMode == 'CW':
 					mode = 'CW '
 				elif inputMode == 'am' or inputMode == 'AM':
 					mode = 'AM '
-				else: print('Mode must be FM, SSB, CW, or AM. Try Again.')
+				else: print('Mode must be FM, SSB, USB, LSB, CW, or AM. Try Again.')
 
 		while power.bit_length() == 0: #Power section
 			inputPower = int(input('Enter Power: '))
