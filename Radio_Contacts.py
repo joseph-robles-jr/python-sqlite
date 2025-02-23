@@ -29,10 +29,10 @@ def setTXCallsign():
 
 	return TXCallsign
 
-def update_contact(TXrst, RXCallsign, RXrst, mode, power, frequency):
+def update_contact(TXCallsign, TXrst, RXCallsign, RXrst, mode, power, frequency):
 	conn = sqlite3.connect('contacts.db')
 	cursor = conn.cursor()
-	cursor.execute('''UPDATE contacts SET TXCallsign = ?, TXrst = ?, RXCallsign = ?, RXrst = ?, mode = ?, power = ?, frequency = ? WHERE TXCallsign = ?''', (TXCallsign, TXrst, RXCallsign, RXrst, mode, power, frequency, TXCallsign))
+	cursor.execute('''UPDATE contacts SET TXrst = ?, RXCallsign = ?, RXrst = ?, mode = ?, power = ?, frequency = ? WHERE TXCallsign = ?''', (TXCallsign, TXrst, RXCallsign, RXrst, mode, power, frequency))
 	conn.commit()
 	conn.close()
 
